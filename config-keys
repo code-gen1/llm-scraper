@@ -1,0 +1,428 @@
+Configuration Keys
+A configuration key is a string that corresponds to a configuration parameter for the software broker. You can use configuration keys to set configuration parameters for the software event broker when you create a container. You do this bypassing the configuration key and its value to the container runtime at startup (for example, as a parameter to docker create).
+
+For information about using these keys, see Initializing a Software Event Broker Container.
+
+The following table lists the configuration keys for the software event broker.
+
+Configuration Key	Description	Value
+bruteforceprotection/enable	
+Enables brute force protection. For more information, see Configuring Brute Force Protection.
+
+yes or no
+
+The default value is yes.
+
+configsync/enable	
+Enables Config-Sync.
+
+To synchronize the HA pair after the software event brokers are initialized, you must manually assert system-level configuration of one event broker over its mate. For more information, see Asserting Event Broker System Configurations.
+
+yes or no
+
+The default value is no.
+
+configsync/tls/enable	
+Enables the use of TLS encryption.
+
+If enabled, and redundancy is also enabled, a pre-shared-key must be configured for config-sync to be operational.
+
+yes or no
+
+The default value is no.
+
+interface/<ip_intf>/physical	
+Docker Host (Linux) physical interface bound to the Solace PubSub+ IP interface.
+
+<os interface>
+
+interface/<ip_intf>/virtualrouter	
+The virtual router to which the Solace PubSub+ IP interface is assigned.
+
+static, primary or backup
+
+The default value is static.
+
+interface/<ip_intf>/enable	
+Indicates whether to enable the Solace PubSub+ IP interface.
+
+yes or no
+
+The default value is yes.
+
+logging/<log_facility>/output	
+The place where a log stream is sent. For more information, see Configuring Container Logging.
+
+file, stdout, all or none
+
+The default value is file.
+
+Valid values for <log_facility> are debug, command, system, event or kernel.
+
+logging/<log_facility>/format	
+The format of a log stream if it is sent to stdout. For more information, see Configuring Container Logging.
+
+legacy, rfc5424, graylog or raw
+
+The default value is legacy.
+
+If file is specified as the log stream destination, the output is always in the legacy format.
+
+Valid values for <log_facility> are debug, command, system, event or kernel.
+
+logging/<log_facility>/messageformat	
+The format of syslog messages emitted from the event broker.
+
+The messageformat key is valid only for the event and system syslog facilities.
+
+text or json
+The default value is text.
+
+If json is specified, the corresponding value of logging/<log_facility>/format is ignored (the format will always be raw). This is also true if this value is switched later via the CLI.
+
+logging/maxjsonmessagesize	
+The maximum size in bytes of JSON log messages. If a remote syslog destination is configured, the syslog header is included.
+
+<max-size> value between 1024 and 8192.
+
+The default value is 8192.
+
+logging/retentionpolicy	
+Controls the policy by which SolOS log files will be retained. If max-size is specified, log files will be retained up to their maximum file sizes allowed by SolOS. If days is specified, log files will be retained for the number of days indicated by the logging/retentionpolicymaxnumdays key.
+
+max-size or days.
+
+The default value is max-size.
+
+logging/retentionpolicymaxnumdays	
+Applicable only when the logging/retentionpolicy key is set to days. The maximum number of days SolOS log files will be retained for. The actual number of days that log files are retained may be less than this value in the event that heavy log output is experienced.
+
+<max-num-days> value between 2 and 90.
+
+The default value is 30.
+
+messagespool/maxspoolusage	
+The maximum amount of the event broker's available message spool resources (in MB) that can be used to spool messages. For details, see Configuring Max Spool Usage.
+
+The valid range is from 0 (in which case spooling is effectively disabled) to the maximum amount of message spool disk space supported for the entire system.
+
+messagevpn/<name>/service/amqp/port	
+The port within the software event broker container that is used by the AMQP service associated with the <name> message VPN.
+
+<port_number>
+
+messagevpn/<name>/service/amqp/tlsport	
+The port that the AMQP service associated with message VPN <name> uses for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+messagevpn/<name>/service/mqtt/port	
+The port that the MQTT service associated with message VPN <name> uses within the software event broker container.
+
+<port_number>
+
+messagevpn/<name>/service/mqtt/tlsport	
+The port that the MQTT service associated with message VPN <name> uses for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+messagevpn/<name>/service/mqtt/webport	
+The port that the MQTT service associated with message VPN <name> uses over WebSockets within the software event broker container.
+
+<port_number>
+
+messagevpn/<name>/service/mqtt/tlswebport	
+The port that the MQTT service associated with message VPN <name> uses over WebSockets for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+messagevpn/<name>/service/rest/port	
+The port that the REST service associated with message VPN <name> uses within the software event broker container.
+
+<port_number>
+
+ 
+
+messagevpn/<name>/service/rest/tlsport	
+The port that the REST service associated with message VPN <name> uses for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+nodetype	
+High-availability (HA) group node type.
+
+message_routing or monitoring
+
+The default value is message_routing.
+
+productkey	
+Installs the feature associated with the specified product key. For more information, see Product Keys on Software Event Brokers .
+
+The product key associated with the required feature(s).
+
+redundancy/activestandbyrole	
+The active standby role of message routing nodes in a HA Group.
+
+primary or backup
+
+The default value is primary.
+
+redundancy/authentication/presharedkey/key	
+The base64-encoded key to use as the redundancy pre-shared key.
+
+<key>
+
+redundancy/authentication/presharedkey/keyfilepath	
+The path to the file containing the base64-encoded key to use as the redundancy pre-shared key.
+
+<key-file-path>
+
+Only one of either key or keyfilepath must be supplied.
+
+Relative file paths for files containing secrets are relative to the /run/secrets directory.
+
+redundancy/enable	
+Enables redundancy.
+
+yes or no
+
+The default value is no.
+
+redundancy/group/node/<name>/connectvia	
+The fully qualified domain name (FQDN) or IP address (and optional port) of a node in a HA Group.
+
+<addr-port>
+
+redundancy/group/node/<name>/nodetype	
+High-availability (HA) group node type.
+
+message_routing or monitoring
+
+The default value is message_routing.
+
+redundancy/matelink/tls/enable	
+Enables mate-link to use TLS encryption.
+
+yes or no
+
+The default value is no.
+
+redundancy/matelink/remote/port	
+The port the mate-links connects to on the HA mate.
+
+<port>
+
+redundancy/mate/smf/port	
+The port that the mate event broker uses for plain-text SMF traffic. This setting is required only when each HA mate listens on a different port.
+
+<port_number>
+
+redundancy/mate/smf/compressedport	
+The port that the mate event broker uses for compressed SMF traffic. This setting is required only when each HA mate listens on a different port.
+
+<port_number>
+
+redundancy/mate/smf/tlsport	
+The port that the mate event broker uses for TLS/SSL SMF traffic. This setting is required only when each HA mate listens on a different port.
+
+<port_number>
+
+routername	
+The Solace PubSub+ router name.
+
+<router_name>
+
+<router_name> must be constructed using only lowercase letters and numbers from 0 to 9, especially when it is to be used to configure redundancy. The use of other characters will prevent the proper functioning of redundancy.
+
+service/healthcheck/port	
+The port that the health check service listens on.
+
+<port_number>
+
+service/healthcheck/tlsport	
+The port that the health check service listens for TLS traffic on.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+service/matelink/port	
+The port that the matelink service listens on.
+
+<port_number>
+
+service/ssh/port	
+The port used by the sshd process within the software event broker container (Corresponds to Solace PubSub+ SSH, see Default Configuration for Software Event Brokers).
+
+<port_number>
+
+service/semp/port	
+The port that SEMP service uses within the software event broker container.
+
+<port_number>
+
+service/semp/tlsport	
+The port that the SEMP service uses for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+service/smf/compressedport	
+The port that the SMF service uses for compressed traffic within the software event broker container.
+
+<port_number>
+
+service/smf/port	
+The port that the SMF service uses within the software event broker container.
+
+<port_number>
+
+service/smf/routingport	
+The port that the SMF service uses for routing control traffic within the software event broker container.
+
+<port_number>
+
+service/smf/tlsport	
+The port that the SMF service uses for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+service/amqp/tlsport	
+The global port used by the AMQP service for TLS traffic within the software event broker container.
+
+<port>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+service/webtransport/port	
+The port that the Web Transport service uses within the software event broker container.
+
+<port_number>
+
+service/webtransport/tlsport	
+The port that the Web Transport service uses for TLS traffic within the software event broker container.
+
+<port_number>
+
+This setting takes effect only if a TLS server certificate is configured.
+
+service/redundancy/firstlistenport	
+The first three ports are used for redundancy activity election. The second and third ports are used as required. For more information, see Default Configuration for Software Event Brokers.
+
+<port_number>
+
+system/scaling/maxbridgecount	The maximum supported number of VPN bridge connections. For more information, see Maximum Number of VPN Bridges.	
+25, 500, or 5000.
+
+For event broker versions 10.7.1 and later, the default value is 25 if max-connections is 100 or 1000, and 500 if otherwise.
+
+system/scaling/maxconnectioncount	
+The maximum supported number of client connections. For more information, see Maximum Number of Client Connections.
+
+100, 1000, 10000, 100000 or 200000
+
+The default value is 100.
+
+system/scaling/maxguaranteedmessagesize	The maximum allowed size, in megabytes, for guaranteed messages on the event broker. For more information, see Maximum Guaranteed Message Size.	
+10 or 30
+
+For event broker versions 10.25.1 and later, the default value is 10 if max-connections is 100 or 1000, and 30 if otherwise.
+
+system/scaling/maxkafkabridgecount	
+The maximum supported number of Kafka bridges. For more information, see Maximum Number of Kafka Bridges.
+
+0, 10, 50, or 200
+
+The default value is 0.
+
+system/scaling/maxkafkabrokerconnectioncount	
+The maximum supported number of Kafka broker connections. For more information, see Maximum Number of Kafka Broker Connections.
+
+0, 300, 2000, or 10000
+
+The default value is 0.
+
+system/scaling/maxqueuemessagecount	
+The maximum supported number of queue messages, in millions of messages. For more information, see Maximum Number of Queue Messages.
+
+100, 240, or 3000
+
+For event broker versions 10.8.1 and later, the default value is 100 if max-connections is 100, and 240 if otherwise.
+
+system/scaling/maxsubscriptioncount	The maximum supported number of subscriptions. For more information, see Maximum Number of Subscriptions.	
+50000, 500000, or 5000000
+
+The default value is 50000 for 100 connections and 500000 for 1000 connections.
+
+tls/crimeexploitprotection/enable	
+Enable protection against the CRIME exploit for TLS+compression. For more information, see Configuring CRIME Exploit Protection.
+
+yes or no
+
+The default value is yes.
+
+tls/servercertificate/filepath	
+The full path to the file containing the TLS server certificate.
+
+<filepath>
+
+If the TLS server certificate contained in the file is encrypted, then the path to a file containing the passphrase must be provided by the tls/servercertificate/ passphrasefilepath configuration key.
+
+Relative file paths for files containing secrets are relative to the /run/secrets directory.
+
+tls/servercertificate/passphrasefilepath	
+The full path to the file containing the passphrase used to decrypt an encrypted TLS server certificate.
+
+<filepath>
+
+Relative file paths for files containing secrets are relative to the /run/secrets directory.
+
+username/<name>/password	
+A plain text Solace CLI user password for username <name>.
+
+<password>
+
+This configuration key is only suitable for development and testing activities and is not recommended for production deployments as it is not a secure way of transferring credentials to Solace PubSub+.
+
+username/<name>/encryptedpassword	
+An encrypted Solace CLI user password for username <name>.
+
+<encryptedpassword>
+
+SHA-512 is supported.
+
+Salt prior to hashing, and the format should be: $6$salt$hashed-password
+
+username/<name>/globalaccesslevel	
+Creates a Solace CLI user with username <name> and assigns the access to global access level.
+
+none, read-only, read-write, admin.
+
+The default value is none.
+
+username/<name>/passwordfilepath	
+The full path to the file containing the password for username <name>.
+
+<passwordfilepath>
+
+Relative file paths for files containing secrets are relative to the /run/secrets directory.
+
+webmanager/redirecthttp/enable	
+Enables or disables the redirection of plain text HTTP request to secure HTTPS connection when accessing Broker Manager.
+
+yes or no
+webmanager/redirecthttp/overridetlsport	
+The HTTPS port used to override the default SEMP HTTPS port use. When accessing Broker Manager, all HTTP requests will be redirected to specified HTTPS port. If the HTTPS port value is specified as zero (0), the configured SEMP SSL/TLS port will be used.
+
+0 … 65535
